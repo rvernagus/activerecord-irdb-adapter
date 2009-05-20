@@ -51,7 +51,6 @@ module ActiveRecord
           result.each do |k, v|
             result[k] = v.to_s.rstrip if v.class == System::String
             result[k] = nil if v.class == System::DBNull
-            p v.class
           end
           result
         end
