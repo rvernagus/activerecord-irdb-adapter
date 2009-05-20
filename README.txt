@@ -11,15 +11,15 @@ is written in 100% Ruby.
 
 == SYNOPSIS:
 
-Core specs:
+Core specs (not yet available):
   rake spec:core
   
-Specs in IronRuby:
+Specs in IronRuby (not yet available):
   rake spec:core_ir
   rake spec:sql_server
   rake spec:oracle
 
-Or run at the command line:
+Or run at the command line (not yet available):
   ir mspec/bin/mspec -B spec/core_ir.mspec
   ir mspec/bin/mspec -B spec/oracle.mspec
   ir mspec/bin/mspec -B spec/sql_server.mspec
@@ -30,7 +30,7 @@ Or run at the command line:
 * hoe
 * irdb
 
-== INSTALL:
+== INSTALL (not yet available):
 
 * igem install activerecord-irdb-adapter
 
