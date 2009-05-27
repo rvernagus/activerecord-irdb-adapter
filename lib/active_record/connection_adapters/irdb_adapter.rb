@@ -18,6 +18,14 @@ module ActiveRecord
   
   module ConnectionAdapters
     class IRDbAdapter < AbstractAdapter
+      def native_database_types
+        {
+          :primary_key => "int not null identity(1,1) primary key",
+          :string      => { :name => "varchar", :limit => 255 },
+          :float       => { :name => "float" }
+        }
+      end
+      
       def select(sql, name=nil)
         log sql, name
         begin
@@ -40,6 +48,11 @@ module ActiveRecord
         cols.map do |col|
           Column.new(col[:name], col[:type], col[:default], col[:nullable?])
         end
+      end
+      
+      def execute(sql, name=nil)
+        log sql, nil
+        @connection.execute_non_query sql
       end
     end
     
