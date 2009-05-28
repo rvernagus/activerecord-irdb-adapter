@@ -18,27 +18,12 @@ module ActiveRecord
   
   module ConnectionAdapters
     class IRDbAdapter < AbstractAdapter
-      def native_database_types
-        {
-          :primary_key => "int not null identity(1,1) primary key",
-          :string      => { :name => "varchar", :limit => 255 },
-          :float       => { :name => "float" }
-        }
-      end
-      
       def select(sql, name=nil)
         log sql, name
         begin
           @connection.execute_hash sql
         rescue System::Data::Common::DbException
-          raise ActiveRecord::StatementInvalid, "#{$!}"
-        end
-      end
-      
-      def add_limit_offset!(sql, options)
-        log sql, nil
-        if options[:limit]
-          "SET ROWCOUNT #{options[:limit]}; #{sql}"
+          raise ActiveRecord::StatementInvalid, $!
         end
       end
       
@@ -57,6 +42,14 @@ module ActiveRecord
     end
     
     class SqlClientAdapter < IRDbAdapter
+      def native_database_types
+        {
+          :primary_key => "int not null identity(1,1) primary key",
+          :string      => { :name => "varchar", :limit => 255 },
+          :float       => { :name => "float" }
+        }
+      end
+      
       def select(sql, name=nil)
         results = super
         # TODO: Create result mapping actions that can be used by different providers?
@@ -66,6 +59,13 @@ module ActiveRecord
             result[k] = nil if v.class == System::DBNull
           end
           result
+        end
+      end
+      
+      def add_limit_offset!(sql, options)
+        log sql, nil
+        if options[:limit]
+          "SET ROWCOUNT #{options[:limit]}; #{sql}"
         end
       end
     end
